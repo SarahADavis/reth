@@ -3918,6 +3918,140 @@
             ],
             "title": "Total Dial Success",
             "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+            },
+            "description": "Duration of supervisor revalidation operations for interop transactions. This metric helps monitor supervisor congestion and performance.",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "Duration (seconds)",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "s"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 102
+            },
+            "id": 105,
+            "options": {
+                "legend": {
+                    "calcs": ["mean", "max", "lastNotNull"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.50, rate(reth_txpool_supervisor_revalidation_duration_seconds_bucket{$instance_label=\"$instance\"}[5m]))",
+                    "hide": false,
+                    "legendFormat": "50th percentile",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.95, rate(reth_txpool_supervisor_revalidation_duration_seconds_bucket{$instance_label=\"$instance\"}[5m]))",
+                    "hide": false,
+                    "legendFormat": "95th percentile",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "histogram_quantile(0.99, rate(reth_txpool_supervisor_revalidation_duration_seconds_bucket{$instance_label=\"$instance\"}[5m]))",
+                    "hide": false,
+                    "legendFormat": "99th percentile",
+                    "range": true,
+                    "refId": "C"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${DS_PROMETHEUS}"
+                    },
+                    "editorMode": "code",
+                    "expr": "rate(reth_txpool_supervisor_revalidation_duration_seconds_sum{$instance_label=\"$instance\"}[5m]) / rate(reth_txpool_supervisor_revalidation_duration_seconds_count{$instance_label=\"$instance\"}[5m])",
+                    "hide": false,
+                    "legendFormat": "Average duration",
+                    "range": true,
+                    "refId": "D"
+                }
+            ],
+            "title": "Supervisor Revalidation Duration",
+            "type": "timeseries"
         }
     ],
     "refresh": "30s",
